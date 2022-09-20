@@ -1,0 +1,49 @@
+# Importar bibliotecas
+import pandas as pd
+import numpy as np
+
+# Buscar DataFrame
+df=pd.read_csv("https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0321EN-SkillsNetwork/datasets/dataset_part_1.csv")
+
+# Checar dados
+df.head(10)
+# Checar estado de nulos
+df.isnull().sum()
+
+# Calcular a porcentagem de nulos em cada categoria
+df.isnull().sum()/df.count()*100
+
+# Checar tipos das colunas
+df.dtypes
+# Quantidade de lançamentos por origem
+df['LaunchSite'].value_counts()
+# Quantidade de lançamentos em cada órbita
+df['Orbit'].value_counts()
+# Checar Quantidade de resultados de lançamento e salvar como variável
+landing_outcomes = df['Outcome'].value_counts()
+landing_outcomes
+# Checar valores de resultados
+for i,outcome in enumerate(landing_outcomes.keys()):
+    print(i,outcome)
+# Criar set com as falhas
+bad_outcomes = set(landing_outcomes.keys()[[1,3,5,6,7]])
+
+# Checar set
+bad_outcomes
+# Criar lista de acordo com o resultado
+landing_class = []
+
+# Loop de adição de resultado
+for row in df['Outcome']: # Para cada linha na coluna
+    if row in bad_outcomes: # Se estiver em bad_outcomes
+        landing_class.append(0) # Adicionar 0 à lista
+    else:
+        landing_class.append(1) # Se não, adicionar 1
+
+# Criar coluna de class
+df['Class'] = landing_class
+
+# Conferir dados
+df.head()
+# Determinar a porcentagem de sucesso
+df['Class'].mean()
